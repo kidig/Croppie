@@ -163,7 +163,7 @@
             if (img.src === src) {
                 // If image source hasn't changed resolve immediately
                 resolve(img);
-            } 
+            }
             else {
                 img.removeAttribute('crossOrigin');
                 if (src.match(/^https?:\/\/|^\/\//)) {
@@ -789,7 +789,7 @@
 
         self.options.update.call(self, data);
         if (self.$ && typeof Prototype == 'undefined') {
-            self.$(self.element).trigger('update', data); 
+            self.$(self.element).trigger('update', data);
         }
         else {
             var ev;
@@ -850,8 +850,9 @@
             }
 
             if (minZoom >= maxZoom) {
-                maxZoom = minZoom + 1;
+                maxZoom = minZoom * maxZoom;
             }
+            maxZoom = self.data.boundMaxZoom !== null ? self.data.boundMaxZoom * minZoom : maxZoom;
 
             zoomer.min = fix(minZoom, 4);
             zoomer.max = fix(maxZoom, 4);
@@ -1073,11 +1074,13 @@
             url = options.url;
             points = options.points || [];
             zoom = typeof(options.zoom) === 'undefined' ? null : options.zoom;
+            maxZoom = typeof(options.maxZoom) === 'undefined' ? null : options.maxZoom;
         }
 
         self.data.bound = false;
         self.data.url = url || self.data.url;
         self.data.boundZoom = zoom;
+        self.data.boundMaxZoom = maxZoom;
 
         return loadImage(url, self.elements.img).then(function (img) {
             if(!points.length){
